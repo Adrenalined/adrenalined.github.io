@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prot Warrior BiS Sheet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: one dark "tooltip parchment" column; each slot is a compact ranked table, item left / source right. Deliberately single dark theme so quality colors read like in-game. */
+:root {
+  --bg: #0d0f14;
+  --panel: #151922;
+  --edge: #2a3140;
+  --fg: #d9dbe2;
+  --muted: #8790a3;
+  --gold: #ffd100;
+  --q2: #1eff00; /* Uncommon */
+  --q3: #0070dd; /* Rare */
+  --q4: #a335ee; /* Epic */
+  --q3-text: #3a95ff;
+  --link: #9fb4d9;
+  --display: "Cinzel", Georgia, serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 14px; }
+.wrap {
+  max-width: 900px; margin: 0 auto;
+  padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 18px;
+}
+header h1 { font-family: var(--display); color: var(--gold); font-size: 1.75rem; margin: 0; letter-spacing: .02em; text-wrap: balance; }
+header p { margin: 6px 0 0; color: var(--muted); line-height: 1.5; }
+header a { color: var(--link); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--muted); }
+.legend span b { font-weight: 600; }
+.q2 { color: var(--q2); } .q3 { color: var(--q3-text); } .q4 { color: var(--q4); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px; }
+section { background: var(--panel); border: 1px solid var(--edge); border-radius: 6px; min-width: 0; }
+section h2 {
+  font-family: var(--display); font-size: .95rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gold); margin: 0; padding: 10px 14px; border-bottom: 1px solid var(--edge);
+}
+table { width: 100%; border-collapse: collapse; }
+td { padding: 7px 14px; vertical-align: top; line-height: 1.35; }
+tr + tr td { border-top: 1px solid #1e2430; }
+td.rank { width: 1%; white-space: nowrap; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding-right: 4px; padding-top: 9px; }
+tr.bis td.rank { color: var(--gold); font-weight: 600; }
+tr.bis td.item a { font-weight: 600; }
+td.item { white-space: nowrap; }
+td.item a { text-decoration: none; }
+td.item a:hover, td.item a:focus-visible { text-decoration: underline; }
+td.src { text-align: right; color: var(--muted); font-size: 13px; }
+td.src a { color: var(--link); text-decoration: none; border-bottom: 1px dotted #4a5670; }
+td.src a:hover, td.src a:focus-visible { color: #cfdcf5; }
+a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 2px; }
+.note { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+@media (max-width: 480px) { td { padding: 7px 10px; } td.src { font-size: 12px; } td.item { white-space: normal; } }
+</style>
+<script>const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: false, iconSize: 'small'};</script>
+<script src="https://wow.zamimg.com/js/tooltips.js"></script>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <h1>Protection Warrior BiS — Pre-Raid</h1>
+    <p>WoW: Forever · Patch 1.60.1 · from the <a href="https://www.wowhead.com/forever/guide/classes/warrior/protection/bis-gear" target="_blank" rel="noopener">Wowhead guide by Riyani</a> (updated 2026‑10‑29).</p>
+  </header>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+const W = "https://www.wowhead.com/forever/";
+const L = (path, text) => `<a href="${W}${path}" target="_blank" rel="noopener">${text}</a>`;
+const BS = L("spell=9785/blacksmithing", "Blacksmithing");
+const TUR = L("currency=3469/tarnished-undermine-real", "Tarnished Undermine Real");
+const ANTHION = L("quest=9022/anthions-parting-words", "Anthion's Parting Words");
+const JUST = L("quest=8937/just-compensation", "Just Compensation");
+const SILVER = "Exalted with " + L("faction=890/silverwing-sentinels", "Silverwing Sentinels");
+const STORM = "Exalted with " + L("faction=730/stormpike-guard", "Stormpike Guard");
+const ORACLE = L("quest=6148/the-scarlet-oracle-demetria", "The Scarlet Oracle, Demetria");
+
+// [rank, itemId, slug, name, quality, sourceHTML]
+const slots = [
+  ["Head", [
+    ["BiS", 12640, "lionheart-helm", "Lionheart Helm", 4, BS],
+    ["Great", 12620, "enchanted-thorium-helm", "Enchanted Thorium Helm", 3, BS],
+    ["Good", 16731, "helm-of-valor", "Helm of Valor", 3, L("npc=1853/darkmaster-gandling", "Darkmaster Gandling")],
+  ]],
+  ["Neck", [
+    ["BiS", 275736, "horn-of-vehan", "Horn of Ve'han", 3, "Datamined – Unknown"],
+    ["Great", 22150, "beads-of-ogre-might", "Beads of Ogre Might", 3, L("quest=8949/falrins-vendetta", "Falrin's Vendetta")],
+    ["Good", 19159, "woven-ivy-necklace", "Woven Ivy Necklace", 3, L("quest=7861/wanted-vile-priestess-hexx-and-her-minions", "Wanted: Vile Priestess Hexx and Her Minions")],
+  ]],
+  ["Shoulders", [
+    ["BiS", 22001, "spaulders-of-heroism", "Spaulders of Heroism", 3, ANTHION],
+    ["Great", 16733, "spaulders-of-valor", "Spaulders of Valor", 3, L("npc=10429/warchief-rend-blackhand", "Warchief Rend Blackhand")],
+    ["Good", 250577, "sentinels-pauldrons", "Sentinel's Pauldrons", 3, BS],
+  ]],
+  ["Back", [
+    ["BiS", 18511, "shifting-cloak", "Shifting Cloak", 4, L("spell=10662/leatherworking", "Leatherworking")],
+    ["Great", 272698, "premier-sergeants-cloak", "Premier Sergeant's Cloak", 3, "Rank 3 PvP"],
+    ["Good", 10249, "masters-cloak", "Master's Cloak of the Champion", 2, "World BoE"],
+  ]],
+  ["Chest", [
+    ["BiS", 12618, "enchanted-thorium-breastplate", "Enchanted Thorium Breastplate", 3, BS],
+    ["Great", 21997, "breastplate-of-heroism", "Breastplate of Heroism", 4, L("quest=9013/saving-the-best-for-last", "Saving the Best for Last")],
+    ["Good", 19693, "darksoul-breastplate", "Darksoul Breastplate", 3, BS],
+  ]],
+  ["Wrist", [
+    ["BiS", 21996, "bracers-of-heroism", "Bracers of Heroism", 3, L("quest=8912/an-earnest-proposition", "An Earnest Proposition")],
+    ["Great", 250582, "sentinels-wristguards", "Sentinel's Wristguards", 3, BS],
+    ["Good", 19580, "berserker-bracers", "Berserker Bracers", 4, SILVER],
+  ]],
+  ["Hands", [
+    ["BiS", 12639, "stronghold-gauntlets", "Stronghold Gauntlets", 4, BS],
+    ["Great", 250552, "sentinels-gloves", "Sentinel's Gloves", 3, BS],
+    ["Good", 21998, "gauntlets-of-heroism", "Gauntlets of Heroism", 4, JUST],
+  ]],
+  ["Waist", [
+    ["BiS", 21994, "belt-of-heroism", "Belt of Heroism", 3, JUST],
+    ["Great", 20204, "defilers-plate-girdle", "Defiler's Plate Girdle", 3, "Honored with " + L("faction=510/the-defilers", "The Defilers")],
+    ["Good", 16736, "belt-of-valor", "Belt of Valor", 3, "BoE from LBRS / Stratholme"],
+  ]],
+  ["Legs", [
+    ["BiS", 22000, "legplates-of-heroism", "Legplates of Heroism", 3, ANTHION],
+    ["Great", 22672, "sentinels-plate-legguards", "Sentinel's Plate Legguards", 4, SILVER],
+    ["Good", 22385, "titanic-leggings", "Titanic Leggings", 4, BS],
+  ]],
+  ["Feet", [
+    ["BiS", 21995, "boots-of-heroism", "Boots of Heroism", 4, ANTHION],
+    ["Great", 250562, "sentinels-sabatons", "Sentinel's Sabatons", 3, BS],
+    ["Good", 16734, "boots-of-valor", "Boots of Valor", 3, L("npc=10506/kirtonos-the-herald", "Kirtonos the Herald")],
+    ["Option", 14549, "boots-of-avoidance", "Boots of Avoidance", 4, "World BoE"],
+  ]],
+  ["Rings", [
+    ["BiS", 275984, "wardens-signet-of-vigilance", "Warden's Signet of Vigilance", 4, "Exalted with " + L("faction=2819/the-watchers", "The Watchers") + " (currently unobtainable)"],
+    ["Great", 19325, "don-julios-band", "Don Julio's Band", 4, STORM],
+    ["Good", 272408, "cutthroats-signet", "Cutthroat's Signet", 3, "75 " + TUR],
+  ]],
+  ["Trinkets", [
+    ["BiS", 272437, "adaptive-combat-assistant", "Adaptive Combat Assistant", 3, "125 " + TUR],
+    ["Great", 17904, "stormpike-insignia-rank-6", "Stormpike Insignia Rank 6", 4, STORM],
+    ["Good", 272440, "defenders-grip-stabilizer", "Defender's Grip Stabilizer", 3, "125 " + TUR],
+    ["Option", 19024, "arena-grand-master", "Arena Grand Master", 3, L("quest=7838/arena-grandmaster", "Arena Grandmaster")],
+  ]],
+  ["One-Hand Weapon", [
+    ["BiS", 17705, "thrash-blade", "Thrash Blade", 3, L("quest=7065/corruption-of-earth-and-seed", "Corruption of Earth and Seed")],
+    ["Great", 871, "flurry-axe", "Flurry Axe", 4, "World BoE"],
+    ["Good", 250618, "bagh-nakh", "Bagh Nakh", 3, L("skill=164/blacksmithing", "Blacksmithing")],
+  ]],
+  ["Shield", [
+    ["BiS", 281637, "antique-bulwark", "Antique Bulwark", 3, "Datamined – Unknown"],
+    ["Great", 16998, "sacred-protector", "Sacred Protector", 3, ORACLE + " / " + L("quest=6187/order-must-be-restored", "Order Must Be Restored")],
+    ["Good", 260210, "a-bigger-shield", "A Bigger Shield", 3, "Datamined – Unknown"],
+  ]],
+  ["Ranged", [
+    ["BiS", 22347, "fahrads-reloading-repeater", "Fahrad's Reloading Repeater", 3, L("quest=9023/the-perfect-poison", "The Perfect Poison")],
+    ["Great", 16996, "gorewood-bow", "Gorewood Bow", 3, ORACLE],
+    ["Good", 19107, "bloodseeker", "Bloodseeker", 3, L("quest=8271/hero-of-the-stormpike", "Hero of the Stormpike")],
+  ]],
+];
+
+document.getElementById("grid").innerHTML = slots.map(([slot, rows]) => `
+  <section><h2>${slot}</h2><table>${rows.map(([rank, id, slug, name, q, src]) => `
+    <tr class="${rank === "BiS" ? "bis" : ""}">
+      <td class="rank">${rank}</td>
+      <td class="item"><a class="q${q}" href="${W}item=${id}/${slug}" target="_blank" rel="noopener">[${name}]</a></td>
+      <td class="src">${src}</td>
+    </tr>`).join("")}</table></section>`).join("");
+
+if (window.$WowheadPower) $WowheadPower.refreshLinks();
+</script>
+
+</body>
+</html>
